@@ -41,6 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
     audioCanvas: document.getElementById('audioCanvas'),
     visualizerContainer: document.getElementById('visualizerContainer'),
     voiceStatusText: document.getElementById('voiceStatusText'),
+    openIntroBtn: document.getElementById('openIntroBtn'),
+    closeIntroBtn: document.getElementById('closeIntroBtn'),
+    exploreDashboardBtn: document.getElementById('exploreDashboardBtn'),
+    launchDemoBtn: document.getElementById('launchDemoBtn'),
+    dontShowIntro: document.getElementById('dontShowIntro'),
+    heroStartBtn: document.getElementById('heroStartBtn'),
+    heroAboutBtn: document.getElementById('heroAboutBtn'),
+    quickCandidateGrid: document.getElementById('quickCandidateGrid'),
   };
 
   // Helper UUID Generator
@@ -55,6 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
      1. INITIALIZATION & CANDIDATES LOAD
      ------------------------------------------------------------ */
   async function initApp() {
+    // Show Purpose & Introduction Modal on first visit
+    const hideIntro = localStorage.getItem('ai_interview_hide_intro') === 'true';
+    if (!hideIntro) {
+      window.InterviewUI.openIntroModal();
+    }
+
     // Setup Voice Engine Canvas
     if (els.audioCanvas) {
       window.voiceEngine.setCanvas(els.audioCanvas);
@@ -104,6 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
         els.candidateSelect.value = candidates[0].id;
         updateSelectedCandidate();
         els.startBtn.disabled = false;
+        if (els.heroStartBtn) els.heroStartBtn.disabled = false;
+        renderQuickCards();
       }
     } catch (e) {
       els.candidateSelect.innerHTML = `<option value="">Error loading candidates</option>`;
@@ -113,9 +129,24 @@ document.addEventListener("DOMContentLoaded", () => {
     populateVoiceSelect();
   }
 
+  function renderQuickCards() {
+    if (els.quickCandidateGrid && candidates.length) {
+      window.InterviewUI.renderQuickCandidateCards(
+        els.quickCandidateGrid,
+        candidates,
+        els.candidateSelect.value,
+        (selectedId) => {
+          els.candidateSelect.value = selectedId;
+          updateSelectedCandidate();
+        }
+      );
+    }
+  }
+
   function updateSelectedCandidate() {
     selectedCandidate = candidates.find(c => c.id === els.candidateSelect.value);
     window.InterviewUI.renderCandidateMeta(els.candidateMeta, selectedCandidate);
+    renderQuickCards();
   }
 
   function populateVoiceSelect() {
@@ -190,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // UI Updates
     if (els.emptyState) els.emptyState.style.display = 'none';
     els.startBtn.disabled = true;
+    if (els.heroStartBtn) els.heroStartBtn.disabled = true;
     els.candidateSelect.disabled = true;
     els.difficultySelect.disabled = true;
     els.progressBlock.style.display = 'flex';
@@ -324,6 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
     els.candidateSelect.disabled = false;
     els.difficultySelect.disabled = false;
     els.startBtn.disabled = false;
+    if (els.heroStartBtn) els.heroStartBtn.disabled = false;
     els.restartBtn.style.display = 'none';
     els.topbarTitle.textContent = 'No interview in progress';
     window.InterviewUI.updateStatusBadge(els.statusPill, els.statusText, '', 'idle');
@@ -336,6 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (els.emptyState) {
       els.emptyState.style.display = 'block';
       els.chatScroll.appendChild(els.emptyState);
+      renderQuickCards();
     }
   }
 
@@ -359,6 +393,40 @@ document.addEventListener("DOMContentLoaded", () => {
   els.startBtn.addEventListener('click', handleStartInterview);
   els.restartBtn.addEventListener('click', handleResetUI);
   els.sendBtn.addEventListener('click', handleSendMessage);
+
+  if (els.heroStartBtn) {
+    els.heroStartBtn.addEventListener('click', handleStartInterview);
+  }
+
+  if (els.openIntroBtn) {
+    els.openIntroBtn.addEventListener('click', () => window.InterviewUI.openIntroModal());
+  }
+
+  if (els.heroAboutBtn) {
+    els.heroAboutBtn.addEventListener('click', () => window.InterviewUI.openIntroModal());
+  }
+
+  if (els.closeIntroBtn) {
+    els.closeIntroBtn.addEventListener('click', () => window.InterviewUI.closeIntroModal());
+  }
+
+  if (els.exploreDashboardBtn) {
+    els.exploreDashboardBtn.addEventListener('click', () => window.InterviewUI.closeIntroModal());
+  }
+
+  if (els.launchDemoBtn) {
+    els.launchDemoBtn.addEventListener('click', () => {
+      window.InterviewUI.closeIntroModal();
+      handleStartInterview();
+    });
+  }
+
+  if (els.dontShowIntro) {
+    els.dontShowIntro.checked = localStorage.getItem('ai_interview_hide_intro') === 'true';
+    els.dontShowIntro.addEventListener('change', (e) => {
+      localStorage.setItem('ai_interview_hide_intro', e.target.checked ? 'true' : 'false');
+    });
+  }
 
   if (els.endEarlyBtn) {
     els.endEarlyBtn.addEventListener('click', () => {
@@ -409,3 +477,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize App
   initApp();
 });
+

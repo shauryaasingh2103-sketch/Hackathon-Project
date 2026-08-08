@@ -112,8 +112,17 @@
         </div>
       </div>
 
-      <!-- Voice Settings & Mute Control -->
+      <!-- Voice Settings, Purpose Modal Toggle & Mute Control -->
       <div class="voice-toolbar">
+        <button class="guide-nav-btn" id="openIntroBtn" title="Platform Purpose & Guide">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>Purpose & Guide</span>
+        </button>
+
         <button class="icon-btn" id="muteBtn" title="Mute/Unmute AI Voice">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -141,8 +150,33 @@
     <!-- Chat Stream Scroll Area -->
     <div class="chat-scroll" id="chatScroll">
       <div class="empty-state" id="emptyState">
-        <h2>Ready for your technical interview</h2>
-        <p>Select a candidate profile from the left sidebar and click <b>Start Interview</b>. You can speak using the microphone or type your responses into the chat composer.</p>
+        <div class="hero-welcome-card">
+          <div class="welcome-badge">⚡ Interactive AI Technical Evaluator</div>
+          <h2>Ready for Your Technical Interview</h2>
+          <p>
+            Select a candidate profile to simulate a personalized technical evaluation session covering AI engineering, vector databases, RAG architecture, and agent orchestration.
+          </p>
+
+          <!-- Quick Candidate Selector Cards -->
+          <div class="quick-candidates-section">
+            <div class="quick-title">Candidate Selectors</div>
+            <div class="candidate-cards-grid" id="quickCandidateGrid">
+              <!-- Dynamically populated candidate cards -->
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-large" id="heroStartBtn" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Start Selected Candidate Interview
+            </button>
+            <button class="btn btn-ghost" id="heroAboutBtn">
+              ℹ️ View Platform Purpose & Guide
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -186,6 +220,110 @@
   </main>
 </div>
 
+<!-- Platform Purpose & Introduction Overlay Modal -->
+<div class="intro-modal-backdrop" id="introModal" style="display:none;">
+  <div class="intro-modal">
+    <button class="intro-modal-close" id="closeIntroBtn" title="Close Overlay">&times;</button>
+    
+    <!-- Hero Header -->
+    <div class="intro-hero">
+      <div class="intro-badge">
+        <span class="intro-badge-dot"></span>
+        <span>AI Cohort Platform</span>
+      </div>
+      <h2>AI Technical Interview Agent</h2>
+      <p class="intro-tagline">
+        An intelligent, voice-enabled evaluation platform designed to conduct rigorous, personalized technical interviews for AI Cohort graduates & software engineers.
+      </p>
+    </div>
+
+    <!-- Core Purpose Banner -->
+    <div class="intro-purpose-box">
+      <div class="purpose-icon">🎯</div>
+      <div class="purpose-text">
+        <h4>Why This Platform Was Built</h4>
+        <p>
+          Standard AI interviewers ask generic questions without evaluating true depth. Our agent builds a <strong>personalized interview plan</strong> by cross-referencing candidate mission histories against a <strong>31-day AI engineering curriculum</strong>. It actively probes shallow answers with dynamic follow-ups, tests code tradeoffs, and produces structured evaluation reports.
+        </p>
+      </div>
+    </div>
+
+    <!-- Key Capabilities Grid -->
+    <div class="intro-features-grid">
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon cyan">📊</div>
+          <h3>Curriculum Plan Generator</h3>
+        </div>
+        <p>Deterministically maps mission records to test Depth (passed days), Fundamentals (3+ attempts), and Awareness (skipped days).</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon indigo">🤖</div>
+          <h3>Dual-Role LLM Engine</h3>
+        </div>
+        <p>Separates <strong>Interviewer</strong> (conversational persona) from <strong>Evaluator</strong> (rubric scoring 1–5 in JSON) to ensure objective evaluation.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon amber">🎙️</div>
+          <h3>Real-Time Voice Engine</h3>
+        </div>
+        <p>Full Speech Recognition (mic), Web Speech Synthesis (voice accents), real-time audio canvas visualizers, and sound effects.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon green">📈</div>
+          <h3>Structured Radar Reports</h3>
+        </div>
+        <p>Generates detailed final evaluation reports with Chart.js mastery spectrum radar graphs, strengths, gaps, and PDF/Markdown exports.</p>
+      </div>
+    </div>
+
+    <!-- Workflow Timeline -->
+    <div class="intro-timeline">
+      <div class="timeline-title">How The Interview Engine Works</div>
+      <div class="timeline-steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-desc">Pick Candidate & Difficulty</div>
+        </div>
+        <div class="step-arrow">➔</div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-desc">AI Builds Topic Plan</div>
+        </div>
+        <div class="step-arrow">➔</div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-desc">Voice / Text Q&A Probing</div>
+        </div>
+        <div class="step-arrow">➔</div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-desc">Radar Skill Report</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer Actions -->
+    <div class="intro-footer">
+      <label class="intro-checkbox">
+        <input type="checkbox" id="dontShowIntro">
+        <span>Don't show automatically on startup</span>
+      </label>
+      <div class="intro-footer-btns">
+        <button class="btn btn-ghost" id="exploreDashboardBtn">Explore Dashboard</button>
+        <button class="btn btn-primary" id="launchDemoBtn">🚀 Launch Demo Interview</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- Modular JavaScript Modules -->
 <script src="/static/js/bg-animation.js"></script>
 <script src="/static/js/api.js"></script>
@@ -195,3 +333,4 @@
 
 </body>
 </html>
+

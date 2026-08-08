@@ -226,6 +226,46 @@ window.printPDFReport = function() {
   window.print();
 };
 
+/**
+ * Render Quick Candidate Selector Cards in launchpad
+ */
+function renderQuickCandidateCards(containerElem, candidates, selectedId, onSelectCallback) {
+  if (!containerElem || !candidates) return;
+  containerElem.innerHTML = '';
+
+  const displayList = candidates.slice(0, 6);
+  displayList.forEach(c => {
+    const card = document.createElement('div');
+    card.className = `quick-candidate-card ${c.id === selectedId ? 'active' : ''}`;
+    card.innerHTML = `
+      <h4>${escapeHtml(c.name)}</h4>
+      <p>${escapeHtml(c.jobRole || 'AI Engineer')}<br/>
+      <span style="color:var(--accent-cyan); font-size:11px;">${c.yearsExperience ? c.yearsExperience + ' yrs exp' : 'Candidate Profile'}</span></p>
+    `;
+    card.addEventListener('click', () => {
+      if (onSelectCallback) onSelectCallback(c.id);
+    });
+    containerElem.appendChild(card);
+  });
+}
+
+/**
+ * Introduction Overlay Modal Controls
+ */
+function openIntroModal() {
+  const modal = document.getElementById('introModal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function closeIntroModal() {
+  const modal = document.getElementById('introModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
 // Export UI handlers
 window.InterviewUI = {
   escapeHtml,
@@ -236,5 +276,9 @@ window.InterviewUI = {
   hideTypingIndicator,
   updateStatusBadge,
   renderDayStrip,
-  renderFeedbackReport
+  renderFeedbackReport,
+  renderQuickCandidateCards,
+  openIntroModal,
+  closeIntroModal
 };
+
