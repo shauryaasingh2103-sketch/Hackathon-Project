@@ -4,28 +4,28 @@
 
 :root {
   /* Color Palette - Cyber / Glass Dark Theme */
-  --bg-dark: #080C14;
-  --bg-gradient: radial-gradient(circle at 50% 0%, #151D2A 0%, #080C14 75%);
-  --panel-bg: rgba(18, 25, 38, 0.75);
-  --panel-bg-hover: rgba(26, 36, 54, 0.85);
-  --panel-border: rgba(255, 255, 255, 0.08);
-  --panel-border-bright: rgba(79, 209, 197, 0.3);
+  --bg-dark: #050811;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #0F172A 0%, #050811 85%);
+  --panel-bg: rgba(15, 23, 42, 0.65);
+  --panel-bg-hover: rgba(26, 38, 64, 0.8);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-border-bright: rgba(79, 209, 197, 0.4);
   
   /* Typography Colors */
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
   --text-muted: #64748B;
   
   /* Brand & Status Accents */
   --accent-cyan: #4FD1C5;
-  --accent-cyan-glow: rgba(79, 209, 197, 0.25);
-  --accent-cyan-dim: rgba(79, 209, 197, 0.12);
+  --accent-cyan-glow: rgba(79, 209, 197, 0.35);
+  --accent-cyan-dim: rgba(79, 209, 197, 0.15);
   
   --accent-indigo: #6366F1;
-  --accent-indigo-glow: rgba(99, 102, 241, 0.3);
+  --accent-indigo-glow: rgba(99, 102, 241, 0.4);
   
   --accent-amber: #F59E0B;
-  --accent-amber-glow: rgba(245, 158, 11, 0.25);
+  --accent-amber-glow: rgba(245, 158, 11, 0.3);
   
   --accent-danger: #EF4444;
   --accent-success: #10B981;
@@ -37,9 +37,9 @@
   --radius-pill: 9999px;
   
   /* Glassmorphism & Shadow Effects */
-  --backdrop-blur: blur(16px);
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 25px rgba(79, 209, 197, 0.15);
+  --backdrop-blur: blur(20px);
+  --shadow-subtle: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 30px rgba(79, 209, 197, 0.25);
   
   /* Font Families */
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
@@ -60,6 +60,48 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Ambient Floating Glow Orbs in Background */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+body::before {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #4FD1C5 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation: floatOrb1 18s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #6366F1 0%, transparent 70%);
+  bottom: -150px;
+  right: -150px;
+  animation: floatOrb2 22s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(120px, 80px) scale(1.2); }
+  100% { transform: translate(40px, 160px) scale(0.9); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-140px, -100px) scale(1.25); }
+  100% { transform: translate(-60px, -40px) scale(0.85); }
 }
 
 .mono {
