@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#080C14"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4FD1C5"/>
+      <stop offset="100%" stop-color="#319795"/>
+    </linearGradient>
+    <linearGradient id="indigoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Base Dark Glass Container -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+
+  <!-- Glowing Accent Outer Ring -->
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="none" stroke="url(#cyanGrad)" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Headset / AI Voice Neural Node Graphic -->
+  <path d="M 18 34 C 18 22, 46 22, 46 34" fill="none" stroke="url(#cyanGrad)" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+  
+  <!-- Ear Cups -->
+  <rect x="14" y="32" width="7" height="12" rx="3.5" fill="url(#cyanGrad)"/>
+  <rect x="43" y="32" width="7" height="12" rx="3.5" fill="url(#cyanGrad)"/>
+
+  <!-- Equalizer Audio Wave Nodes in Center -->
+  <rect x="25" y="31" width="3" height="10" rx="1.5" fill="url(#indigoGrad)"/>
+  <rect x="30" y="27" width="4" height="18" rx="2" fill="url(#cyanGrad)" filter="url(#glow)"/>
+  <rect x="36" y="29" width="3" height="14" rx="1.5" fill="url(#indigoGrad)"/>
+  <rect x="41" y="33" width="2" height="6" rx="1" fill="url(#cyanGrad)"/>
+
+  <!-- AI Spark Dot -->
+  <circle cx="32" cy="18" r="2.5" fill="#4FD1C5" filter="url(#glow)"/>
+</svg>
