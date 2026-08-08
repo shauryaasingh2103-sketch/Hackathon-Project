@@ -118,8 +118,8 @@ out of scope per the brief).
 ## Try it right now (no coding needed)
 
 1. Install dependencies once: `pip install -r requirements.txt`
-2. Get an API key from `console.anthropic.com` and set it:
-   `export ANTHROPIC_API_KEY=sk-ant-...`
+2. Get an API key from [Google AI Studio](https://aistudio.google.com/apikey) and set it:
+   `export GEMINI_API_KEY=...`
 3. Start the server: `uvicorn app.main:app --port 8000`
 4. Open **http://localhost:8000** in your browser — that's the whole UI.
    Pick a candidate from the dropdown, hit "Start interview", and chat.
@@ -138,8 +138,8 @@ The easiest path is **Render.com**, because this repo already includes a
    connect your GitHub repo.
 3. Render reads `render.yaml` automatically and shows one service:
    `ai-interview-agent`. Click **Apply**.
-4. It will ask for `ANTHROPIC_API_KEY` — paste your key from
-   `console.anthropic.com`. Everything else is pre-filled.
+4. It will ask for `GEMINI_API_KEY` — paste your key from
+   [Google AI Studio](https://aistudio.google.com/apikey). Everything else is pre-filled.
 5. Click **Deploy**. Wait ~2-3 minutes for the build.
 6. Render gives you a public URL like `https://ai-interview-agent.onrender.com`
    — open it, and the exact same chat page is now live for anyone with the link.
@@ -178,7 +178,7 @@ app/
     index.html    self-contained chat frontend (HTML/CSS/JS, no build step)
   orchestrator.py the ask → evaluate → decide → act state machine
   planner.py      builds the personalized interview plan from candidate + curriculum
-  llm.py          interviewer / evaluator / feedback prompts, Anthropic + mock backends
+  llm.py          interviewer / evaluator / feedback prompts, Gemini + mock backends
   curriculum.py   loads curriculum.json, lookup helpers
   models.py       pydantic models: API contract + internal session state
   state.py        in-memory session store
@@ -194,9 +194,9 @@ render.yaml       Render.com blueprint (auto-detected on deploy)
 
 | Env var | Default | Purpose |
 |---|---|---|
-| `LLM_PROVIDER` | `anthropic` | `anthropic` for real calls, `mock` for offline dev/test |
-| `ANTHROPIC_API_KEY` | — | required when `LLM_PROVIDER=anthropic` |
-| `INTERVIEW_MODEL` | `claude-sonnet-4-6` | model used for all three roles |
+| `LLM_PROVIDER` | `gemini` | `gemini` for real calls, `mock` for offline dev/test |
+| `GEMINI_API_KEY` | — | required when `LLM_PROVIDER=gemini` |
+| `INTERVIEW_MODEL` | `gemini-3.5-flash-lite` | model used for all three roles |
 
 ## Known limitations / next steps
 
