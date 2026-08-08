@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     candidateMeta: document.getElementById('candidateMeta'),
     startBtn: document.getElementById('startBtn'),
     restartBtn: document.getElementById('restartBtn'),
+    endEarlyBtn: document.getElementById('endEarlyBtn'),
     chatScroll: document.getElementById('chatScroll'),
     emptyState: document.getElementById('emptyState'),
     messageInput: document.getElementById('messageInput'),
@@ -265,11 +266,13 @@ document.addEventListener("DOMContentLoaded", () => {
         els.messageInput.disabled = true;
         els.sendBtn.disabled = true;
         els.micBtn.disabled = true;
+        els.endEarlyBtn.style.display = 'none';
         els.restartBtn.style.display = 'block';
       } else {
         els.messageInput.disabled = false;
         els.sendBtn.disabled = false;
         els.micBtn.disabled = false;
+        els.endEarlyBtn.style.display = 'block';
         els.messageInput.focus();
         startTurnTimer();
       }
@@ -356,6 +359,15 @@ document.addEventListener("DOMContentLoaded", () => {
   els.startBtn.addEventListener('click', handleStartInterview);
   els.restartBtn.addEventListener('click', handleResetUI);
   els.sendBtn.addEventListener('click', handleSendMessage);
+
+  if (els.endEarlyBtn) {
+    els.endEarlyBtn.addEventListener('click', () => {
+      if (confirm("Are you sure you want to end the interview now and view your performance report?")) {
+        els.messageInput.value = "end the interview";
+        handleSendMessage();
+      }
+    });
+  }
 
   // Microphone toggle button
   els.micBtn.addEventListener('click', () => {

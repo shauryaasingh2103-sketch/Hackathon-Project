@@ -78,6 +78,19 @@ def continue_session(state: SessionState, message: str) -> tuple[SessionState, s
     Processes the candidate's latest message. Returns:
         (updated_state, reply_text, done, feedback_or_none)
     """
+    message_lower = message.strip().lower()
+    EXIT_PHRASES = [
+        "end interview", "stop interview", "end the interview",
+        "quit interview", "exit interview", "finish interview",
+        "cancel interview", "stop the interview", "i want to end",
+        "i want to stop", "wrap up", "end session"
+    ]
+    if any(phrase in message_lower for phrase in EXIT_PHRASES):
+        state.phase = "done"
+        closing = llm.closing_message(state)
+        feedback = llm.generate_feedback(state)
+        return state, closing, True, feedback
+
     plan_items = _plan_items(state)
 
     current = state.current_turn()
