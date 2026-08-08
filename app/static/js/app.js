@@ -8,10 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let candidates = [];
   let selectedCandidate = null;
   let interviewDone = false;
+  let turnTimerInterval = null;
+  let remainingTime = 0;
 
   // DOM Element References
   const els = {
     candidateSelect: document.getElementById('candidateSelect'),
+    difficultySelect: document.getElementById('difficultySelect'),
+    timerSelect: document.getElementById('timerSelect'),
     candidateMeta: document.getElementById('candidateMeta'),
     startBtn: document.getElementById('startBtn'),
     restartBtn: document.getElementById('restartBtn'),
@@ -27,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
     topbarTitle: document.getElementById('topbarTitle'),
     statusPill: document.getElementById('statusPill'),
     statusText: document.getElementById('statusText'),
+    timerPill: document.getElementById('timerPill'),
+    timerText: document.getElementById('timerText'),
     muteBtn: document.getElementById('muteBtn'),
     voiceSettingsToggle: document.getElementById('voiceSettingsToggle'),
     voiceSettingsBar: document.getElementById('voiceSettingsBar'),
@@ -123,7 +129,51 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ------------------------------------------------------------
-     2. INTERVIEW SESSION CONTROL
+     2. TURN RESPONSE TIMER CONTROLLER
+     ------------------------------------------------------------ */
+  function startTurnTimer() {
+    clearTurnTimer();
+    const limit = parseInt(els.timerSelect.value, 10);
+    if (!limit || limit <= 0) {
+      els.timerPill.style.display = 'none';
+      return;
+    }
+
+    remainingTime = limit;
+    els.timerPill.style.display = 'inline-flex';
+    updateTimerText();
+
+    turnTimerInterval = setInterval(() => {
+      remainingTime--;
+      updateTimerText();
+
+      if (remainingTime <= 0) {
+        clearTurnTimer();
+        // Time expired auto-submit
+        if (!els.messageInput.value.trim()) {
+          els.messageInput.value = "Candidate timed out before answering this question.";
+        }
+        handleSendMessage();
+      }
+    }, 1000);
+  }
+
+  function clearTurnTimer() {
+    if (turnTimerInterval) {
+      clearInterval(turnTimerInterval);
+      turnTimerInterval = null;
+    }
+    els.timerPill.style.display = 'none';
+  }
+
+  function updateTimerText() {
+    const mins = Math.floor(remainingTime / 60);
+    const secs = remainingTime % 60;
+    els.timerText.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+  /* ------------------------------------------------------------
+     3. INTERVIEW SESSION CONTROL
      ------------------------------------------------------------ */
   async function handleStartInterview() {
     const c = candidates.find(c => c.id === els.candidateSelect.value);
@@ -133,17 +183,22 @@ document.addEventListener("DOMContentLoaded", () => {
     sessionId = uuid();
     interviewDone = false;
 
+    // Play Sci-Fi Start Chime
+    window.voiceEngine.playStartSFX();
+
     // UI Updates
     if (els.emptyState) els.emptyState.style.display = 'none';
     els.startBtn.disabled = true;
     els.candidateSelect.disabled = true;
+    els.difficultySelect.disabled = true;
     els.progressBlock.style.display = 'flex';
     els.topbarTitle.textContent = `Interviewing ${c.name}`;
     window.InterviewUI.updateStatusBadge(els.statusPill, els.statusText, 'live', 'in progress');
     window.InterviewUI.showTypingIndicator(els.chatScroll);
 
     try {
-      const data = await window.InterviewAPI.postStartInterview(sessionId, c.raw);
+      const difficulty = els.difficultySelect ? els.difficultySelect.value : "senior";
+      const data = await window.InterviewAPI.postStartInterview(sessionId, c.raw, difficulty);
       window.InterviewUI.hideTypingIndicator();
       
       // Render reply and automatically read aloud via voice engine
@@ -155,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
       els.micBtn.disabled = false;
       els.messageInput.focus();
 
+      startTurnTimer();
       refreshInterviewStatus();
     } catch (e) {
       window.InterviewUI.hideTypingIndicator();
@@ -165,6 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
   async function handleSendMessage() {
     const text = els.messageInput.value.trim();
     if (!text || interviewDone) return;
+
+    clearTurnTimer();
+    window.voiceEngine.playSendSFX();
 
     // Stop active listening & speech synthesis
     window.voiceEngine.stopListening();
@@ -194,6 +253,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (data.done) {
         interviewDone = true;
+        clearTurnTimer();
+        window.voiceEngine.playFanfareSFX();
         window.InterviewUI.updateStatusBadge(els.statusPill, els.statusText, 'done', 'complete');
         els.topbarTitle.textContent = `Interview complete — ${selectedCandidate.name}`;
         
@@ -210,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
         els.sendBtn.disabled = false;
         els.micBtn.disabled = false;
         els.messageInput.focus();
+        startTurnTimer();
       }
 
       refreshInterviewStatus();
@@ -250,12 +312,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleResetUI() {
     sessionId = null;
     interviewDone = false;
+    clearTurnTimer();
     window.voiceEngine.stopSpeaking();
     window.voiceEngine.stopListening();
 
     els.chatScroll.innerHTML = '';
     els.progressBlock.style.display = 'none';
     els.candidateSelect.disabled = false;
+    els.difficultySelect.disabled = false;
     els.startBtn.disabled = false;
     els.restartBtn.style.display = 'none';
     els.topbarTitle.textContent = 'No interview in progress';
@@ -273,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ------------------------------------------------------------
-     3. REPLAY QUESTION VOICE FUNCTION
+     4. REPLAY QUESTION VOICE FUNCTION
      ------------------------------------------------------------ */
   window.handleReplayTTS = function(btnElem) {
     const msgDiv = btnElem.closest('.msg');
@@ -286,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* ------------------------------------------------------------
-     4. EVENT LISTENERS
+     5. EVENT LISTENERS
      ------------------------------------------------------------ */
   els.candidateSelect.addEventListener('change', updateSelectedCandidate);
   els.startBtn.addEventListener('click', handleStartInterview);

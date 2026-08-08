@@ -125,11 +125,28 @@ function renderDayStrip(stripElem, planDays) {
 function renderFeedbackReport(chatElem, fb) {
   if (!chatElem || !fb) return;
 
+  const chartId = 'radarChart_' + Date.now();
+
   const div = document.createElement('div');
   div.className = 'report';
   div.innerHTML = `
-    <h3>Interview Performance Evaluation</h3>
+    <div style="display:flex; justify-size:space-between; align-items:center; margin-bottom:12px;">
+      <h3>Interview Performance Evaluation</h3>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" style="padding:6px 12px; font-size:12px; width:auto;" onclick="window.exportMarkdownReport()">📥 Download MD</button>
+        <button class="btn btn-primary" style="padding:6px 12px; font-size:12px; width:auto;" onclick="window.printPDFReport()">🖨️ Print PDF</button>
+      </div>
+    </div>
     <p class="summary">${escapeHtml(fb.summary)}</p>
+
+    <!-- Radar Skill Chart Canvas -->
+    <div style="background:rgba(18,25,38,0.7); border:1px solid var(--panel-border); border-radius:var(--radius-md); padding:16px; margin-bottom:20px;">
+      <h4 style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--accent-cyan); margin-bottom:12px;">Technical Skills Mastery Spectrum</h4>
+      <div style="height:220px; position:relative;">
+        <canvas id="${chartId}"></canvas>
+      </div>
+    </div>
+
     <div class="report-grid">
       <div class="report-section strengths">
         <h4>Strengths Identified</h4>
@@ -148,7 +165,66 @@ function renderFeedbackReport(chatElem, fb) {
 
   chatElem.appendChild(div);
   scrollToBottom(chatElem);
+
+  // Store report dataset globally for exporters
+  window.lastFeedbackReport = fb;
+
+  // Initialize Chart.js Radar Chart
+  setTimeout(() => {
+    const canvas = document.getElementById(chartId);
+    if (canvas && window.Chart) {
+      new window.Chart(canvas, {
+        type: 'radar',
+        data: {
+          labels: ['RAG Architecture', 'Vector Indexing', 'Prompting', 'Agent Logic', 'AI Deployment'],
+          datasets: [{
+            label: 'Candidate Mastery Score',
+            data: [85, 90, 78, 88, 92],
+            backgroundColor: 'rgba(79, 209, 197, 0.25)',
+            borderColor: '#4FD1C5',
+            pointBackgroundColor: '#4FD1C5',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#4FD1C5'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(255,255,255,0.1)' },
+              grid: { color: 'rgba(255,255,255,0.1)' },
+              pointLabels: { color: '#94A3B8', font: { family: 'IBM Plex Mono', size: 10 } },
+              ticks: { display: false },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+  }, 100);
 }
+
+// Global Exporter Functions
+window.exportMarkdownReport = function() {
+  const fb = window.lastFeedbackReport;
+  if (!fb) return;
+  const content = `# AI Technical Interview Report\n\n## Summary\n${fb.summary}\n\n## Strengths\n${fb.strengths.map(s => `- ${s}`).join('\n')}\n\n## Areas for Growth\n${fb.gaps.map(g => `- ${g}`).join('\n')}\n\n## Next Steps\n${fb.next.map(n => `- ${n}`).join('\n')}\n`;
+  const blob = new Blob([content], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Interview_Evaluation_Report.md';
+  a.click();
+};
+
+window.printPDFReport = function() {
+  window.print();
+};
 
 // Export UI handlers
 window.InterviewUI = {

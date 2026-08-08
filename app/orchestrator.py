@@ -14,13 +14,14 @@ from .models import SessionState, Turn
 from .planner import build_plan, InterviewPlan
 
 
-def start_session(session_id: str, candidate: dict) -> tuple[SessionState, str]:
+def start_session(session_id: str, candidate: dict, difficulty: str = "senior") -> tuple[SessionState, str]:
     plan: InterviewPlan = build_plan(candidate)
 
     state = SessionState(
         session_id=session_id,
         candidate_name=plan.candidate_name,
         job_role=plan.job_role,
+        difficulty=difficulty,
         plan_days=[item.day for item in plan.items],
     )
 

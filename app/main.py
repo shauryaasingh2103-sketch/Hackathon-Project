@@ -101,7 +101,8 @@ def interview(req: InterviewRequest) -> InterviewResponse:
                 detail="First request for a new sessionId must include 'candidate'.",
             )
         try:
-            state, reply = orchestrator.start_session(session_id, req.candidate)
+            diff = req.difficulty or "senior"
+            state, reply = orchestrator.start_session(session_id, req.candidate, difficulty=diff)
         except (KeyError, IndexError) as e:
             raise HTTPException(
                 status_code=400, detail=f"Malformed candidate payload: {e}"

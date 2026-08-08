@@ -18,11 +18,11 @@ async function fetchCandidates() {
  * @param {string} sessionId 
  * @param {object} candidatePayload 
  */
-async function postStartInterview(sessionId, candidatePayload) {
+async function postStartInterview(sessionId, candidatePayload, difficulty = "senior") {
   const res = await fetch(`${API_BASE}/api/interview`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId, candidate: candidatePayload })
+    body: JSON.stringify({ sessionId, candidate: candidatePayload, difficulty })
   });
   if (!res.ok) throw new Error(`Start interview error (${res.status})`);
   return await res.json();

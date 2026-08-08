@@ -13,6 +13,9 @@
   <!-- Favicon Logo -->
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
   <link rel="shortcut icon" type="image/svg+xml" href="/static/favicon.svg" />
+
+  <!-- Chart.js Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <!-- Modular CSS Stylesheets -->
   <link rel="stylesheet" href="/static/css/variables.css" />
@@ -42,6 +45,24 @@
         <option value="">Loading candidate profiles…</option>
       </select>
       <div id="candidateMeta"></div>
+    </div>
+
+    <div>
+      <label class="field-label">Interview Difficulty</label>
+      <select id="difficultySelect">
+        <option value="junior">🟢 Junior Engineer (Supportive)</option>
+        <option value="senior" selected>🟡 Senior Architect (Standard)</option>
+        <option value="principal">🔴 Principal Architect (Rigorous)</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="field-label">Turn Response Timer</label>
+      <select id="timerSelect">
+        <option value="0" selected>⚡ Unlimited Time</option>
+        <option value="60">⏱️ 60 Seconds</option>
+        <option value="120">⏱️ 120 Seconds</option>
+      </select>
     </div>
 
     <button class="btn btn-primary" id="startBtn" disabled>
@@ -83,6 +104,10 @@
         <div class="status-pill" id="statusPill">
           <span class="status-dot"></span>
           <span id="statusText">idle</span>
+        </div>
+        <div class="status-pill" id="timerPill" style="display:none; border-color:var(--accent-amber); color:var(--accent-amber);">
+          <span class="status-dot" style="background:var(--accent-amber);"></span>
+          <span id="timerText">--:--</span>
         </div>
       </div>
 

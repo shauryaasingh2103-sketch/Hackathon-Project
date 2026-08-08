@@ -8,6 +8,7 @@ class InterviewRequest(BaseModel):
     sessionId: str
     candidate: Optional[dict] = None   # present only on the FIRST request
     message: Optional[str] = None      # present on every subsequent turn
+    difficulty: Optional[str] = "senior" # optional difficulty mode: junior, senior, principal
 
 
 class Feedback(BaseModel):
@@ -46,6 +47,7 @@ class SessionState(BaseModel):
     session_id: str
     candidate_name: str
     job_role: str
+    difficulty: str = "senior"
 
     plan_days: list[int] = []          # ordered list of days in the plan
     plan_index: int = 0                # pointer into plan_days

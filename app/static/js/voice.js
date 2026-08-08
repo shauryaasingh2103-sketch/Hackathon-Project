@@ -263,7 +263,7 @@ class VoiceEngine {
   }
 
   /* ------------------------------------------------------------
-     4. AUDIO CHIME SYNTHESIZER (WEB AUDIO API)
+     4. AUDIO CHIME SYNTHESIZER & SFX (WEB AUDIO API)
      ------------------------------------------------------------ */
   playChime(freq, duration) {
     try {
@@ -283,6 +283,22 @@ class VoiceEngine {
     } catch (e) {
       // Audio context policy safe fallback
     }
+  }
+
+  playStartSFX() {
+    this.playChime(440, 0.1);
+    setTimeout(() => this.playChime(880, 0.25), 100);
+  }
+
+  playSendSFX() {
+    this.playChime(600, 0.08);
+    setTimeout(() => this.playChime(1200, 0.12), 60);
+  }
+
+  playFanfareSFX() {
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+      setTimeout(() => this.playChime(freq, 0.2), idx * 120);
+    });
   }
 }
 
