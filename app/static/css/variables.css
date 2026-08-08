@@ -1,0 +1,67 @@
+/* ============================================================
+   AI INTERVIEW AGENT - DESIGN SYSTEM VARIABLES & THEME TOKENS
+   ============================================================ */
+
+:root {
+  /* Color Palette - Cyber / Glass Dark Theme */
+  --bg-dark: #080C14;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #151D2A 0%, #080C14 75%);
+  --panel-bg: rgba(18, 25, 38, 0.75);
+  --panel-bg-hover: rgba(26, 36, 54, 0.85);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --panel-border-bright: rgba(79, 209, 197, 0.3);
+  
+  /* Typography Colors */
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  
+  /* Brand & Status Accents */
+  --accent-cyan: #4FD1C5;
+  --accent-cyan-glow: rgba(79, 209, 197, 0.25);
+  --accent-cyan-dim: rgba(79, 209, 197, 0.12);
+  
+  --accent-indigo: #6366F1;
+  --accent-indigo-glow: rgba(99, 102, 241, 0.3);
+  
+  --accent-amber: #F59E0B;
+  --accent-amber-glow: rgba(245, 158, 11, 0.25);
+  
+  --accent-danger: #EF4444;
+  --accent-success: #10B981;
+  
+  /* Layout Dimensions & Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+  
+  /* Glassmorphism & Shadow Effects */
+  --backdrop-blur: blur(16px);
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 25px rgba(79, 209, 197, 0.15);
+  
+  /* Font Families */
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-interview-agent
+    runtime: docker
+    plan: free
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: INTERVIEW_MODEL
+        value: gemini-3.5-flash-lite

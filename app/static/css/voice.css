@@ -1,0 +1,164 @@
+/* ============================================================
+   AI INTERVIEW AGENT - VOICE INTERFACE & AUDIO VISUALIZER
+   ============================================================ */
+
+/* Microphone Control Button */
+.mic-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: rgba(26, 36, 54, 0.8);
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mic-btn:hover:not(:disabled) {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: rgba(79, 209, 197, 0.1);
+}
+
+.mic-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Active Recording Pulse State */
+.mic-btn.listening {
+  background: var(--accent-cyan);
+  color: #04211E;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px var(--accent-cyan-glow);
+  animation: micPulse 1.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes micPulse {
+  0% { box-shadow: 0 0 0 0 rgba(79, 209, 197, 0.7); }
+  70% { box-shadow: 0 0 0 14px rgba(79, 209, 197, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 209, 197, 0); }
+}
+
+/* Audio Visualizer Bar / Canvas */
+.visualizer-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  background: rgba(18, 25, 38, 0.7);
+  border: 1px solid var(--panel-border-bright);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  animation: slideUp 0.2s ease;
+}
+
+.visualizer-canvas {
+  width: 100%;
+  height: 24px;
+}
+
+.voice-status-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-cyan);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Audio Playback Button on Message Bubbles */
+.tts-play-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tts-play-btn:hover {
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+.tts-play-btn.speaking {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan-glow);
+  animation: ttsPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes ttsPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* Topbar Voice Settings & Mute Control */
+.voice-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: rgba(26, 36, 54, 0.7);
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.icon-btn.active {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+}
+
+/* Voice Settings Dropdown Bar */
+.voice-settings-bar {
+  display: none;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: rgba(18, 25, 38, 0.9);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  animation: slideUp 0.2s ease;
+}
+
+.voice-settings-bar.open {
+  display: flex;
+}
+
+.voice-settings-bar select {
+  padding: 4px 8px;
+  font-size: 12px;
+  width: auto;
+}
