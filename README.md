@@ -6,6 +6,9 @@ grounded questions from the 31-day curriculum, probes shallow answers with
 follow-ups, and produces a structured feedback report — all behind the single
 endpoint defined in `technical-spec.md`.
 
+🎥 [Watch the demo video](your-video-link-here)
+🔗 [Live demo](https://ai-cohort-voice-enabled-interview-agent.onrender.com/)
+
 ## Why it's built this way
 
 Rather than one big "be an interviewer" system prompt looping over chat
