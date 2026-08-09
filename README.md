@@ -6,7 +6,7 @@ grounded questions from the 31-day curriculum, probes shallow answers with
 follow-ups, and produces a structured feedback report — all behind the single
 endpoint defined in `technical-spec.md`.
 
-🎥 [Watch the demo video](your-video-link-here)
+🎥 [Watch the demo video](https://www.linkedin.com/posts/shaurya-singh-03a816325_abtalks-vibecodathon-48hourhackathon-ugcPost-7492164562654220288-cBMs/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFIrKa4BA-qnLqtWdksE2i6BVNVhylna9i0)
 🔗 [Live demo](https://ai-cohort-voice-enabled-interview-agent.onrender.com/)
 
 ## Why it's built this way
